@@ -8,6 +8,7 @@ import {
   Search,
   Target,
   ChevronRight,
+  Wallet,
   X,
 } from "lucide-react";
 
@@ -18,7 +19,8 @@ export default function Sidebar({ isOpen, onClose }) {
     { name: "Dashboard", href: "/dashboard", icon: <Home className="w-5 h-5" /> },
     { name: "Progress", href: "/progress", icon: <BarChart3 className="w-5 h-5" /> },
     { name: "Reminders", href: "/reminders", icon: <Bell className="w-5 h-5" /> },
-    { name: "Goals", href: "/goals", icon: <Target className="w-5 h-5" /> },
+    { name: "Expenses", href: "/expenses", icon: <Wallet className="w-5 h-5" /> }, 
+    // { name: "Goals", href: "/goals", icon: <Target className="w-5 h-5" /> },
   ];
 
   const isActive = (href) => pathname === href || pathname.startsWith(href + "/");

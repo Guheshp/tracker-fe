@@ -15,6 +15,8 @@ export default function UserProfile() {
   const [progress, setProgress] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+
 
   useEffect(() => {
     checkAuth();
@@ -34,7 +36,7 @@ export default function UserProfile() {
     setError("");
     try {
       const response = await fetch(
-        `http://localhost:5000/api/users/profile/${userId}`,
+        `${API_URL}/users/profile/${userId}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`

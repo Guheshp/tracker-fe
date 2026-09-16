@@ -42,6 +42,8 @@ export default function ProgressPage() {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [trendDays, setTrendDays] = useState(30);
   const [loading, setLoading] = useState(true);
+   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+
 
   useEffect(() => {
     checkAuth();
@@ -71,14 +73,14 @@ export default function ProgressPage() {
   const authHeaders = { Authorization: `Bearer ${token}` };
 
   const fetchStats = async () => {
-    const res = await fetch("http://localhost:5000/api/activities/stats", { headers: authHeaders });
+    const res = await fetch(`${API_URL}/activities/stats`, { headers: authHeaders });
     const data = await res.json();
     if (data.success) setStats(data.stats);
   };
 
   const fetchHeatmap = async () => {
     const res = await fetch(
-      `http://localhost:5000/api/activities/heatmap?month=${selectedMonth}&year=${selectedYear}`,
+      `${API_URL}/activities/heatmap?month=${selectedMonth}&year=${selectedYear}`,
       { headers: authHeaders }
     );
     const data = await res.json();
@@ -87,7 +89,7 @@ export default function ProgressPage() {
 
   const fetchTrend = async () => {
     const res = await fetch(
-      `http://localhost:5000/api/activities/trend?days=${trendDays}`,
+      `${API_URL}/activities/trend?days=${trendDays}`,
       { headers: authHeaders }
     );
     const data = await res.json();
@@ -95,13 +97,13 @@ export default function ProgressPage() {
   };
 
   const fetchInsights = async () => {
-    const res = await fetch("http://localhost:5000/api/activities/insights", { headers: authHeaders });
+    const res = await fetch(`${API_URL}/activities/insights`, { headers: authHeaders });
     const data = await res.json();
     if (data.success) setInsights(data.insights);
   };
 
   const fetchMilestones = async () => {
-    const res = await fetch("http://localhost:5000/api/activities/milestones", { headers: authHeaders });
+    const res = await fetch(`${API_URL}/activities/milestones`, { headers: authHeaders });
     const data = await res.json();
     if (data.success) setMilestones(data);
   };

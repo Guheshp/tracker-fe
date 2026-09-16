@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import useAuthStore from "../authStore";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import AuthShimmer from "../components/AuthShimmer";
 
 export default function AppLayout({ children }) {
   const router = useRouter();
@@ -22,7 +21,11 @@ export default function AppLayout({ children }) {
   }, [user, isLoading, router]);
 
   if (isLoading || !user) {
-    return <AuthShimmer />;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-950">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-violet-600"></div>
+      </div>
+    );
   }
 
   return (
