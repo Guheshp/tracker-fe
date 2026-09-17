@@ -1,14 +1,13 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   X,
-  Clock,
   Calendar,
-  Bell,
   Volume2,
   Check,
   AlertCircle,
-  ArrowLeft,
+  Play,
+  Square,
 } from "lucide-react";
 import {
   Drawer,
@@ -19,8 +18,14 @@ import {
   DrawerClose,
 } from "./ui/drawer.jsx";
 
+const SOUND_PATHS = {
+  chime: "/sounds/chime.mp3",
+  alarm: "/sounds/alarm.mp3",
+  urgent: "/sounds/urgent.mp3",
+  melody: "/sounds/melody.mp3",
+};
+
 export default function ReminderDrawer({ isOpen, onClose, onSave, initialData }) {
-  // view: "menu" would be used if you had a manage-menu; here it's just the form
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [reminderDateTime, setReminderDateTime] = useState("");
@@ -31,27 +36,78 @@ export default function ReminderDrawer({ isOpen, onClose, onSave, initialData })
   const [snoozeDuration, setSnoozeDuration] = useState(5);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  const soundOptions = [
-    { value: "chime", label: "🔔 Gentle Chime" },
-    { value: "alarm", label: "🔊 Standard Alarm" },
-    { value: "urgent", label: "🚨 Urgent Alert" },
-    { value: "melody", label: "🎵 Melody" },
-    { value: "silent", label: "🔇 Silent" },
-  ];
+  const audioRef = useRef(null);
 
-  const reminderTypes = [
-    { value: "meeting", label: "📅 Meeting" },
-    { value: "task", label: "✅ Task" },
-    { value: "activity", label: "🏋️ Activity" },
-    { value: "break", label: "☕ Break" },
-    { value: "custom", label: "📌 Custom" },
-  ];
+  // Stop any playing audio when drawer closes
+  useEffect(() => {
+    if (!isOpen && audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
+      setIsPlaying(false);
+    }
+  }, [isOpen]);
 
-  // Reset form when drawer opens or editing target changes
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
+  const stopPreview = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
+    }
+    setIsPlaying(false);
+  };
+
+  const playPreview = (soundType) => {
+    if (soundType === "silent") return;
+
+    // Stop any currently playing sound
+    stopPreview();
+
+    const path = SOUND_PATHS[soundType] || SOUND_PATHS.chime;
+    try {
+      const audio = new Audio(path);
+      audio.volume = 0.6;
+
+      audio.onended = () => {
+        setIsPlaying(false);
+        audioRef.current = null;
+      };
+      audio.onerror = () => {
+        console.warn("Sound failed to load:", path);
+        setIsPlaying(false);
+        audioRef.current = null;
+      };
+
+      audioRef.current = audio;
+      setIsPlaying(true);
+      audio.play().catch((err) => {
+        console.warn("Playback failed:", err.message);
+        setIsPlaying(false);
+        audioRef.current = null;
+      });
+    } catch (err) {
+      console.warn("Audio init failed:", err.message);
+      setIsPlaying(false);
+    }
+  };
+
+  // Reset form on open
   useEffect(() => {
     if (!isOpen) return;
     setError("");
+    stopPreview();
 
     if (initialData) {
       setTitle(initialData.title || "");
@@ -77,14 +133,15 @@ export default function ReminderDrawer({ isOpen, onClose, onSave, initialData })
       setRecurringPattern("daily");
       setSnoozeDuration(5);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, initialData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!title.trim()) return setError("Title is required");
     if (!reminderDateTime) return setError("Date and time are required");
 
+    stopPreview();
     setLoading(true);
     setError("");
 
@@ -109,14 +166,18 @@ export default function ReminderDrawer({ isOpen, onClose, onSave, initialData })
     }
   };
 
+  const handleClose = () => {
+    stopPreview();
+    onClose();
+  };
+
   return (
     <Drawer
       open={isOpen}
-      onOpenChange={(open) => !open && onClose()}
+      onOpenChange={(open) => !open && handleClose()}
       direction="right"
     >
       <DrawerContent>
-        {/* HEADER */}
         <DrawerHeader className="!border-b-0">
           <div className="flex items-start justify-between">
             <div>
@@ -131,7 +192,7 @@ export default function ReminderDrawer({ isOpen, onClose, onSave, initialData })
             </div>
             <DrawerClose asChild>
               <button
-                onClick={onClose}
+                onClick={handleClose}
                 className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition"
               >
                 <X className="w-5 h-5" />
@@ -140,7 +201,6 @@ export default function ReminderDrawer({ isOpen, onClose, onSave, initialData })
           </div>
         </DrawerHeader>
 
-        {/* BODY */}
         <div className="flex-1 overflow-y-auto px-5 pb-5">
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
@@ -204,7 +264,13 @@ export default function ReminderDrawer({ isOpen, onClose, onSave, initialData })
                 Reminder Type
               </label>
               <div className="grid grid-cols-3 gap-2">
-                {reminderTypes.map((type) => (
+                {[
+                  { value: "meeting", label: "📅 Meeting" },
+                  { value: "task", label: "✅ Task" },
+                  { value: "activity", label: "🏋️ Activity" },
+                  { value: "break", label: "☕ Break" },
+                  { value: "custom", label: "📌 Custom" },
+                ].map((type) => (
                   <button
                     key={type.value}
                     type="button"
@@ -227,17 +293,49 @@ export default function ReminderDrawer({ isOpen, onClose, onSave, initialData })
                 <Volume2 className="w-3.5 h-3.5" />
                 Notification Sound
               </label>
-              <select
-                value={sound}
-                onChange={(e) => setSound(e.target.value)}
-                className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white text-sm"
-              >
-                {soundOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+              <div className="flex gap-2">
+                <select
+                  value={sound}
+                  onChange={(e) => setSound(e.target.value)}
+                  className="flex-1 px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white text-sm"
+                >
+                  {[
+                    { value: "chime", label: "🔔 Gentle Chime" },
+                    { value: "alarm", label: "🔊 Standard Alarm" },
+                    { value: "urgent", label: "🚨 Urgent Alert" },
+                    { value: "melody", label: "🎵 Melody" },
+                    { value: "silent", label: "🔇 Silent" },
+                  ].map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+
+                {isPlaying ? (
+                  <button
+                    type="button"
+                    onClick={stopPreview}
+                    className="px-3 py-2.5 text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition flex items-center gap-1"
+                  >
+                    <Square className="w-3 h-3" />
+                    Stop
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => playPreview(sound)}
+                    disabled={sound === "silent"}
+                    className="px-3 py-2.5 text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition disabled:opacity-50 flex items-center gap-1"
+                  >
+                    <Play className="w-3 h-3" />
+                    Play
+                  </button>
+                )}
+              </div>
+              <p className="text-[10px] text-gray-400 mt-1">
+                Click Play to preview the sound. Click Stop to cancel.
+              </p>
             </div>
 
             {/* RECURRING */}
@@ -288,7 +386,7 @@ export default function ReminderDrawer({ isOpen, onClose, onSave, initialData })
             <div className="flex gap-2 pt-2">
               <button
                 type="button"
-                onClick={onClose}
+                onClick={handleClose}
                 className="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition text-sm font-medium"
               >
                 Cancel

@@ -2,23 +2,12 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Bell,
-  Plus,
-  Clock,
-  Check,
-  X,
-  Volume2,
-  Calendar,
-  Zap,
-  Coffee,
-  Edit2,
-  Pause,
-  Trash2,
-  Users,
-  Activity,
+  Bell, Plus, Clock, Check, Volume2, Calendar, Zap, Coffee,
+  Edit2, Pause, Trash2, Users, Activity,
 } from "lucide-react";
 import useAuthStore from "../../authStore";
 import ReminderDrawer from "../../components/ReminderDrawer";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
 export default function RemindersPage() {
@@ -38,17 +27,10 @@ export default function RemindersPage() {
   }, []);
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      router.push("/login");
-    }
-    if (user && token) {
-      fetchReminders();
-    }
+    if (!isLoading && !user) router.push("/login");
+    if (user && token) fetchReminders();
   }, [user, isLoading, token]);
 
-  // =========================
-  // FETCH
-  // =========================
   const fetchReminders = async () => {
     setLoading(true);
     try {
@@ -78,9 +60,6 @@ export default function RemindersPage() {
     }
   };
 
-  // =========================
-  // CREATE / UPDATE
-  // =========================
   const handleCreateReminder = async (data) => {
     try {
       const response = await fetch(`${API_URL}/reminders`, {
@@ -117,6 +96,12 @@ export default function RemindersPage() {
       if (result.success) {
         await fetchReminders();
         setEditingReminder(null);
+        const saved = localStorage.getItem("firedReminderIds");
+        if (saved) {
+          const next = new Set(JSON.parse(saved));
+          next.delete(id);
+          localStorage.setItem("firedReminderIds", JSON.stringify([...next]));
+        }
       }
       return result;
     } catch (error) {
@@ -125,9 +110,6 @@ export default function RemindersPage() {
     }
   };
 
-  // =========================
-  // DELETE
-  // =========================
   const handleDeleteReminder = async (id) => {
     if (!confirm("Delete this reminder?")) return;
     try {
@@ -144,9 +126,6 @@ export default function RemindersPage() {
     }
   };
 
-  // =========================
-  // SNOOZE / COMPLETE
-  // =========================
   const handleSnoozeReminder = async (id, duration = 5) => {
     try {
       const response = await fetch(`${API_URL}/reminders/${id}/snooze`, {
@@ -158,10 +137,7 @@ export default function RemindersPage() {
         body: JSON.stringify({ snoozeDuration: duration }),
       });
       const result = await response.json();
-      if (result.success) {
-        await fetchReminders();
-        playSound("snooze");
-      }
+      if (result.success) await fetchReminders();
     } catch (error) {
       console.error("Error snoozing reminder:", error);
     }
@@ -174,27 +150,12 @@ export default function RemindersPage() {
         headers: { Authorization: `Bearer ${token}` },
       });
       const result = await response.json();
-      if (result.success) {
-        await fetchReminders();
-        playSound("complete");
-      }
+      if (result.success) await fetchReminders();
     } catch (error) {
       console.error("Error completing reminder:", error);
     }
   };
 
-  const playSound = (type) => {
-    try {
-      const audio = new Audio(`/sounds/${type}.mp3`);
-      audio.play().catch(() => {});
-    } catch {
-      /* silent — sound is optional */
-    }
-  };
-
-  // =========================
-  // HELPERS
-  // =========================
   const formatTime = (date) => {
     if (!date) return "—";
     const d = new Date(date);
@@ -222,15 +183,11 @@ export default function RemindersPage() {
 
   const getTypeColor = (type) => {
     const colors = {
-      meeting:
-        "bg-purple-100 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400",
+      meeting: "bg-purple-100 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400",
       task: "bg-blue-100 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400",
-      activity:
-        "bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400",
-      break:
-        "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400",
-      custom:
-        "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400",
+      activity: "bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400",
+      break: "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400",
+      custom: "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400",
     };
     return colors[type] || colors.custom;
   };
@@ -243,31 +200,16 @@ export default function RemindersPage() {
       : reminders;
 
   const emptyMessages = {
-    today: {
-      icon: "🎉",
-      title: "No reminders for today",
-      subtitle: "All caught up!",
-    },
-    upcoming: {
-      icon: "📅",
-      title: "No upcoming reminders",
-      subtitle: "Your schedule is clear for the next week.",
-    },
-    all: {
-      icon: "🔔",
-      title: "No reminders yet",
-      subtitle: "Create your first reminder to get started.",
-    },
+    today: { icon: "🎉", title: "No reminders for today", subtitle: "All caught up!" },
+    upcoming: { icon: "📅", title: "No upcoming reminders", subtitle: "Your schedule is clear for the next week." },
+    all: { icon: "🔔", title: "No reminders yet", subtitle: "Create your first reminder to get started." },
   };
 
   const empty = emptyMessages[activeTab];
 
-  // =========================
-  // RENDER
-  // =========================
   return (
     <div className="p-2 lg:p-2">
-      <div className="">
+      <div>
         {/* Header */}
         <div className="flex items-center justify-between mb-5 flex-wrap gap-2">
           <div>
@@ -327,7 +269,6 @@ export default function RemindersPage() {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-600"></div>
           </div>
         ) : activeList.length === 0 ? (
-          /* Empty state */
           <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
             <div className="text-4xl mb-3">{empty.icon}</div>
             <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -338,7 +279,6 @@ export default function RemindersPage() {
             </p>
           </div>
         ) : (
-          /* List */
           <div className="space-y-2.5">
             {activeList.map((reminder) => (
               <div
@@ -447,24 +387,22 @@ export default function RemindersPage() {
         )}
       </div>
 
-{/* Reminder Modal → Drawer */}
-{showModal && (
-  <ReminderDrawer
-    isOpen={showModal}
-    onClose={() => {
-      setShowModal(false);
-      setEditingReminder(null);
-    }}
-    onSave={async (data) => {
-      if (editingReminder) {
-        return handleUpdateReminder(editingReminder.id, data);
-      } else {
-        return handleCreateReminder(data);
-      }
-    }}
-    initialData={editingReminder}
-  />
-)}
+      {/* Reminder Drawer */}
+      <ReminderDrawer
+        isOpen={showModal}
+        onClose={() => {
+          setShowModal(false);
+          setEditingReminder(null);
+        }}
+        onSave={async (data) => {
+          if (editingReminder) {
+            return handleUpdateReminder(editingReminder.id, data);
+          } else {
+            return handleCreateReminder(data);
+          }
+        }}
+        initialData={editingReminder}
+      />
     </div>
   );
 }
