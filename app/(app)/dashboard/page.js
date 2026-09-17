@@ -265,22 +265,55 @@ export default function Dashboard() {
     return d > tm;
   };
 
-  const canToggleDay = (dayIndex) => isTodayDate(dayIndex) && canComplete;
+  // const canToggleDay = (dayIndex) => isTodayDate(dayIndex) && canComplete;
+
+  const canToggleDay = (dayIndex) => {
+    if (isPastDate(dayIndex)) return true;
+    if (isTodayDate(dayIndex)) return canComplete;
+    return false;
+  };
+
+  // const handleDayToggle = (activityId, dayIndex) => {
+  //   if (!canToggleDay(dayIndex)) {
+  //     if (isPastDate(dayIndex)) alert("❌ Cannot modify past days.");
+  //     else if (isFutureDate(dayIndex)) alert("⏳ Cannot mark future days.");
+  //     else if (!canComplete) alert("⏰ Time's up for today!");
+  //     return;
+  //   }
+  //   const monthKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}`;
+  //   const logKey = `${activityId}-day-${dayIndex}`;
+  //   setDayLogs((prev) => {
+  //     const next = { ...prev, [logKey]: !prev[logKey] };
+  //     localStorage.setItem(`dayLogs_${monthKey}`, JSON.stringify(next));
+  //     return next;
+  //   });
+  //   toggleActivity(activityId);
+  // };
 
   const handleDayToggle = (activityId, dayIndex) => {
     if (!canToggleDay(dayIndex)) {
-      if (isPastDate(dayIndex)) alert("❌ Cannot modify past days.");
-      else if (isFutureDate(dayIndex)) alert("⏳ Cannot mark future days.");
-      else if (!canComplete) alert("⏰ Time's up for today!");
+      if (isFutureDate(dayIndex)) {
+        alert("⏳ Cannot mark future days.");
+      } else if (!canComplete) {
+        alert("⏰ Time's up for today!");
+      }
       return;
     }
+
     const monthKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}`;
     const logKey = `${activityId}-day-${dayIndex}`;
+
     setDayLogs((prev) => {
-      const next = { ...prev, [logKey]: !prev[logKey] };
+      const next = {
+        ...prev,
+        [logKey]: !prev[logKey],
+      };
+
       localStorage.setItem(`dayLogs_${monthKey}`, JSON.stringify(next));
+
       return next;
     });
+
     toggleActivity(activityId);
   };
 
@@ -582,7 +615,8 @@ export default function Dashboard() {
                           const isPast = isPastDate(i);
                           const isFuture = isFutureDate(i);
                           const isToday = isTodayDate(i);
-                          const canToggle = isToday && canComplete;
+                          // const canToggle = isToday && canComplete;
+                          const canToggle = canToggleDay(i);
 
                           // ===== CELL CLASSES =====
                           let cellClass =
@@ -738,7 +772,8 @@ export default function Dashboard() {
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-4 h-4 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded"></span>
-            <span className="text-gray-400">Past (locked)</span>
+            {/* <span className="text-gray-400">Past (locked)</span> */}
+            <span className="text-gray-400">Past (clickable)</span>
           </div>
           {!canComplete && (
             <div className="flex items-center gap-1.5 text-red-500">

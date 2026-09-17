@@ -3,6 +3,14 @@ import { create } from "zustand";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+const getToken = () => {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  return localStorage.getItem("token");
+};
+
 const useAuthStore = create((set, get) => ({
   user: null,
   token: null,
@@ -12,7 +20,7 @@ const useAuthStore = create((set, get) => ({
   error: null,
 
   checkAuth: async () => {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (!token) {
       set({ isLoading: false, user: null, token: null });
       return;
@@ -28,12 +36,16 @@ const useAuthStore = create((set, get) => ({
         set({ user: data.user, token, isLoading: false });
         await get().fetchActivities();
       } else {
-        localStorage.removeItem("token");
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("token");
+        }
         set({ user: null, token: null, isLoading: false });
       }
     } catch (error) {
       console.error("Check auth error:", error);
-      localStorage.removeItem("token");
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("token");
+      }
       set({ user: null, token: null, isLoading: false });
     }
   },
@@ -49,7 +61,9 @@ const useAuthStore = create((set, get) => ({
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("token", data.token);
+        if (typeof window !== "undefined") {
+          localStorage.setItem("token", data.token);
+        }
         set({
           user: data.user,
           token: data.token,
@@ -79,7 +93,9 @@ const useAuthStore = create((set, get) => ({
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("token", data.token);
+        if (typeof window !== "undefined") {
+          localStorage.setItem("token", data.token);
+        }
         set({
           user: data.user,
           token: data.token,
@@ -99,7 +115,7 @@ const useAuthStore = create((set, get) => ({
   },
 
   fetchActivities: async () => {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (!token) return;
 
     try {
@@ -121,7 +137,7 @@ const useAuthStore = create((set, get) => ({
   },
 
   fetchTodayProgress: async () => {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (!token) return;
 
     try {
@@ -143,7 +159,7 @@ const useAuthStore = create((set, get) => ({
   },
 
   toggleActivity: async (activityId) => {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (!token) return;
 
     try {
@@ -174,7 +190,9 @@ const useAuthStore = create((set, get) => ({
   },
 
   logout: () => {
-    localStorage.removeItem("token");
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("token");
+    }
     set({
       user: null,
       token: null,

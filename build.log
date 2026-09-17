@@ -1,0 +1,132 @@
+
+> frontend@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.35
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/11) ...
+(node:78821) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+TypeError: localStorage.getItem is not a function
+    at 858 (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/chunks/45.js:1:44483)
+    at t (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/webpack-runtime.js:1:127)
+    at 3256 (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/chunks/386.js:1:14275)
+    at Object.t [as require] (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/webpack-runtime.js:1:127)
+    at require (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:17:18811)
+    at s (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:88330)
+    at /Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:98875
+    at /Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:98962
+    at t (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:99165)
+    at runNextTicks (node:internal/process/task_queues:64:5) {
+  digest: '1065100427'
+}
+
+Error occurred prerendering page "/expenses". Read more: https://nextjs.org/docs/messages/prerender-error
+
+TypeError: localStorage.getItem is not a function
+    at 858 (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/chunks/45.js:1:44483)
+    at t (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/webpack-runtime.js:1:127)
+    at 3256 (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/chunks/386.js:1:14275)
+    at Object.t [as require] (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/webpack-runtime.js:1:127)
+    at require (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:17:18811)
+    at s (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:88330)
+    at /Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:98875
+    at /Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:98962
+    at t (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:99165)
+    at runNextTicks (node:internal/process/task_queues:64:5)
+(node:78820) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+TypeError: localStorage.getItem is not a function
+    at 858 (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/chunks/45.js:1:44483)
+    at t (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/webpack-runtime.js:1:127)
+    at 3256 (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/chunks/386.js:1:14275)
+    at Object.t [as require] (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/webpack-runtime.js:1:127)
+    at require (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:17:18811)
+    at s (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:88330)
+    at /Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:98875
+    at /Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:98962
+    at t (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:99165) {
+  digest: '3938509388'
+}
+
+Error occurred prerendering page "/progress". Read more: https://nextjs.org/docs/messages/prerender-error
+
+TypeError: localStorage.getItem is not a function
+    at 858 (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/chunks/45.js:1:44483)
+    at t (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/webpack-runtime.js:1:127)
+    at 3256 (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/chunks/386.js:1:14275)
+    at Object.t [as require] (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/webpack-runtime.js:1:127)
+    at require (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:17:18811)
+    at s (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:88330)
+    at /Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:98875
+    at /Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:98962
+    at t (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:99165)
+(node:78818) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+TypeError: localStorage.getItem is not a function
+    at 858 (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/chunks/45.js:1:44483)
+    at t (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/webpack-runtime.js:1:127)
+    at 3256 (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/chunks/386.js:1:14275)
+    at Object.t [as require] (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/webpack-runtime.js:1:127)
+    at require (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:17:18811)
+    at s (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:88330)
+    at /Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:98875
+    at /Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:98962
+    at t (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:99165)
+    at runNextTicks (node:internal/process/task_queues:64:5) {
+  digest: '1065100427'
+}
+
+Error occurred prerendering page "/reminders". Read more: https://nextjs.org/docs/messages/prerender-error
+
+TypeError: localStorage.getItem is not a function
+    at 858 (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/chunks/45.js:1:44483)
+    at t (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/webpack-runtime.js:1:127)
+    at 3256 (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/chunks/386.js:1:14275)
+    at Object.t [as require] (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/webpack-runtime.js:1:127)
+    at require (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:17:18811)
+    at s (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:88330)
+    at /Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:98875
+    at /Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:98962
+    at t (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:99165)
+    at runNextTicks (node:internal/process/task_queues:64:5)
+   Generating static pages (2/11) 
+   Generating static pages (5/11) 
+   Generating static pages (8/11) 
+TypeError: localStorage.getItem is not a function
+    at 858 (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/chunks/45.js:1:44483)
+    at t (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/webpack-runtime.js:1:127)
+    at 3256 (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/chunks/386.js:1:14275)
+    at Object.t [as require] (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/webpack-runtime.js:1:127)
+    at require (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:17:18811)
+    at s (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:88330)
+    at /Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:98875
+    at /Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:98962
+    at t (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:99165) {
+  digest: '3938509388'
+}
+
+Error occurred prerendering page "/dashboard". Read more: https://nextjs.org/docs/messages/prerender-error
+
+TypeError: localStorage.getItem is not a function
+    at 858 (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/chunks/45.js:1:44483)
+    at t (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/webpack-runtime.js:1:127)
+    at 3256 (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/chunks/386.js:1:14275)
+    at Object.t [as require] (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/.next/server/webpack-runtime.js:1:127)
+    at require (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:17:18811)
+    at s (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:88330)
+    at /Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:98875
+    at /Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:98962
+    at t (/Users/guheshpanjagall/Desktop/activity-tracker/activity-tracker-frontend/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:99165)
+ ✓ Generating static pages (11/11)
+
+> Export encountered errors on following paths:
+	/(app)/dashboard/page: /dashboard
+	/(app)/expenses/page: /expenses
+	/(app)/progress/page: /progress
+	/(app)/reminders/page: /reminders
