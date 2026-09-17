@@ -16,7 +16,6 @@ import {
 import useAuthStore from "../../authStore";
 import ActivityDrawer from "../../components/ActivityDrawer";
 
-
 export default function Dashboard() {
   const router = useRouter();
   const {
@@ -28,8 +27,7 @@ export default function Dashboard() {
     token,
     fetchActivities,
   } = useAuthStore();
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
-
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const [currentDate, setCurrentDate] = useState(new Date());
   const [currentMonth, setCurrentMonth] = useState("");
   const [currentYear, setCurrentYear] = useState("");
@@ -56,8 +54,18 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
     if (!isLoading && !user) router.push("/login");
 
     const monthNames = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December",
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
     setCurrentMonth(monthNames[currentDate.getMonth()]);
     setCurrentYear(currentDate.getFullYear().toString());
@@ -190,7 +198,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
       quickName.trim(),
       "📋",
       quickStart || "",
-      quickEnd || ""
+      quickEnd || "",
     );
     setQuickAdding(false);
 
@@ -216,9 +224,13 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
   // NAVIGATION
   // =====================
   const goToPrevMonth = () =>
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
+    setCurrentDate(
+      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1),
+    );
   const goToNextMonth = () =>
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+    setCurrentDate(
+      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1),
+    );
   const goToCurrentMonth = () => setCurrentDate(new Date());
 
   // =====================
@@ -230,7 +242,11 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
     dayIndex + 1 === today.getDate();
 
   const isPastDate = (dayIndex) => {
-    const d = new Date(currentDate.getFullYear(), currentDate.getMonth(), dayIndex + 1);
+    const d = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      dayIndex + 1,
+    );
     d.setHours(0, 0, 0, 0);
     const tm = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     tm.setHours(0, 0, 0, 0);
@@ -238,7 +254,11 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
   };
 
   const isFutureDate = (dayIndex) => {
-    const d = new Date(currentDate.getFullYear(), currentDate.getMonth(), dayIndex + 1);
+    const d = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      dayIndex + 1,
+    );
     d.setHours(0, 0, 0, 0);
     const tm = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     tm.setHours(0, 0, 0, 0);
@@ -277,12 +297,20 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
   };
 
   const getTimeOfDay = (time) => {
-    if (!time) return { icon: <Clock className="w-3 h-3" />, color: "text-gray-400" };
+    if (!time)
+      return { icon: <Clock className="w-3 h-3" />, color: "text-gray-400" };
     const hour = parseInt(time.split(":")[0]);
-    if (hour < 6) return { icon: <Moon className="w-3 h-3" />, color: "text-indigo-500" };
-    if (hour < 12) return { icon: <Sunrise className="w-3 h-3" />, color: "text-orange-500" };
-    if (hour < 17) return { icon: <Sun className="w-3 h-3" />, color: "text-yellow-500" };
-    if (hour < 20) return { icon: <Sunset className="w-3 h-3" />, color: "text-pink-500" };
+    if (hour < 6)
+      return { icon: <Moon className="w-3 h-3" />, color: "text-indigo-500" };
+    if (hour < 12)
+      return {
+        icon: <Sunrise className="w-3 h-3" />,
+        color: "text-orange-500",
+      };
+    if (hour < 17)
+      return { icon: <Sun className="w-3 h-3" />, color: "text-yellow-500" };
+    if (hour < 20)
+      return { icon: <Sunset className="w-3 h-3" />, color: "text-pink-500" };
     return { icon: <Moon className="w-3 h-3" />, color: "text-blue-500" };
   };
 
@@ -294,7 +322,8 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
     return [...list].sort((a, b) => {
       if (a.startTime && !b.startTime) return -1;
       if (!a.startTime && b.startTime) return 1;
-      if (a.startTime && b.startTime) return a.startTime.localeCompare(b.startTime);
+      if (a.startTime && b.startTime)
+        return a.startTime.localeCompare(b.startTime);
       return (a.order || 0) - (b.order || 0);
     });
   }, [activities]);
@@ -313,7 +342,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
   const daysInMonth = new Date(
     currentDate.getFullYear(),
     currentDate.getMonth() + 1,
-    0
+    0,
   ).getDate();
 
   const weeks = [];
@@ -334,7 +363,9 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
     let completed = 0;
     if (sortedActivities.length === 0) return { ...week, completed };
     for (let i = week.start; i < week.end; i++) {
-      const allCompleted = sortedActivities.every((a) => dayLogs[`${a.id}-day-${i}`]);
+      const allCompleted = sortedActivities.every(
+        (a) => dayLogs[`${a.id}-day-${i}`],
+      );
       if (allCompleted) completed++;
     }
     return { ...week, completed };
@@ -344,7 +375,9 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
   let monthlyCompletedDays = 0;
   if (sortedActivities.length > 0) {
     for (let i = 0; i < daysInMonth; i++) {
-      const allCompleted = sortedActivities.every((a) => dayLogs[`${a.id}-day-${i}`]);
+      const allCompleted = sortedActivities.every(
+        (a) => dayLogs[`${a.id}-day-${i}`],
+      );
       if (allCompleted) monthlyCompletedDays++;
     }
   }
@@ -448,8 +481,8 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
                           isPast
                             ? "text-gray-400 dark:text-gray-600"
                             : isFuture
-                            ? "text-gray-400 dark:text-gray-600"
-                            : "text-gray-600 dark:text-gray-300"
+                              ? "text-gray-400 dark:text-gray-600"
+                              : "text-gray-600 dark:text-gray-300"
                         }`}
                       >
                         {i + 1}
@@ -476,7 +509,10 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
               <tbody>
                 {sortedActivities.length === 0 ? (
                   <tr>
-                    <td colSpan={daysInMonth + 1} className="px-4 py-16 text-center">
+                    <td
+                      colSpan={daysInMonth + 1}
+                      className="px-4 py-16 text-center"
+                    >
                       <div className="flex flex-col items-center gap-3">
                         <div className="text-5xl">📋</div>
                         <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -560,8 +596,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
                             cellClass +=
                               " bg-blue-50 dark:bg-blue-900/15 hover:bg-emerald-50 dark:hover:bg-emerald-900/25";
                           } else if (isPast) {
-                            cellClass +=
-                              " bg-gray-50 dark:bg-gray-800/50";
+                            cellClass += " bg-gray-50 dark:bg-gray-800/50";
                           }
 
                           if (canToggle) {
@@ -611,7 +646,9 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
                             type="text"
                             value={quickName}
                             onChange={(e) => setQuickName(e.target.value)}
-                            onKeyDown={(e) => e.key === "Enter" && handleQuickAdd()}
+                            onKeyDown={(e) =>
+                              e.key === "Enter" && handleQuickAdd()
+                            }
                             placeholder="Activity name..."
                             autoFocus
                             className="min-w-[180px] px-3 py-2 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
@@ -653,10 +690,13 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
                           </button>
                         </div>
                         {quickError && (
-                          <p className="text-[11px] text-red-500 px-1">{quickError}</p>
+                          <p className="text-[11px] text-red-500 px-1">
+                            {quickError}
+                          </p>
                         )}
                         <p className="text-[10px] text-gray-400 px-1">
-                          Time is optional. Leave blank to add without a time slot.
+                          Time is optional. Leave blank to add without a time
+                          slot.
                         </p>
                       </div>
                     ) : (
@@ -692,7 +732,9 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-4 h-4 bg-blue-500 rounded shadow-sm"></span>
-            <span className="text-gray-600 dark:text-gray-400">Today (clickable)</span>
+            <span className="text-gray-600 dark:text-gray-400">
+              Today (clickable)
+            </span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-4 h-4 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded"></span>
@@ -716,10 +758,14 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
               <p className="text-xs font-bold text-gray-600 dark:text-gray-400">
                 {week.label}
               </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">{week.days}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {week.days}
+              </p>
               <p className="text-xl font-bold text-gray-900 dark:text-white mt-1">
                 {week.completed}{" "}
-                <span className="text-sm font-normal text-gray-400">/ {week.total}</span>
+                <span className="text-sm font-normal text-gray-400">
+                  / {week.total}
+                </span>
               </p>
               <div className="mt-1 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
                 <div
@@ -776,7 +822,11 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
               { emoji: "💡", line1: "Small steps", line2: "make big changes" },
-              { emoji: "✨", line1: "Be consistent", line2: "Build good habits" },
+              {
+                emoji: "✨",
+                line1: "Be consistent",
+                line2: "Build good habits",
+              },
               { emoji: "🌟", line1: "Create", line2: "The life you want" },
               { emoji: "📈", line1: "Track", line2: "Your progress daily" },
             ].map((n, i) => (

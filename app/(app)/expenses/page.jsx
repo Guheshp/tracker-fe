@@ -26,8 +26,7 @@ export default function ExpensesPage() {
   const [filterType, setFilterType] = useState("all"); // all | 1 | 2
   const [filterCategory, setFilterCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
-
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     checkAuth();
@@ -149,7 +148,7 @@ export default function ExpensesPage() {
       list = list.filter(
         (e) =>
           e.title.toLowerCase().includes(q) ||
-          (e.description || "").toLowerCase().includes(q)
+          (e.description || "").toLowerCase().includes(q),
       );
     }
 

@@ -42,8 +42,7 @@ export default function ProgressPage() {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [trendDays, setTrendDays] = useState(30);
   const [loading, setLoading] = useState(true);
-   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
-
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     checkAuth();
@@ -73,7 +72,9 @@ export default function ProgressPage() {
   const authHeaders = { Authorization: `Bearer ${token}` };
 
   const fetchStats = async () => {
-    const res = await fetch(`${API_URL}/activities/stats`, { headers: authHeaders });
+    const res = await fetch(`${API_URL}/activities/stats`, {
+      headers: authHeaders,
+    });
     const data = await res.json();
     if (data.success) setStats(data.stats);
   };
@@ -81,29 +82,32 @@ export default function ProgressPage() {
   const fetchHeatmap = async () => {
     const res = await fetch(
       `${API_URL}/activities/heatmap?month=${selectedMonth}&year=${selectedYear}`,
-      { headers: authHeaders }
+      { headers: authHeaders },
     );
     const data = await res.json();
     if (data.success) setHeatmap(data.heatmap);
   };
 
   const fetchTrend = async () => {
-    const res = await fetch(
-      `${API_URL}/activities/trend?days=${trendDays}`,
-      { headers: authHeaders }
-    );
+    const res = await fetch(`${API_URL}/activities/trend?days=${trendDays}`, {
+      headers: authHeaders,
+    });
     const data = await res.json();
     if (data.success) setTrend(data.trend);
   };
 
   const fetchInsights = async () => {
-    const res = await fetch(`${API_URL}/activities/insights`, { headers: authHeaders });
+    const res = await fetch(`${API_URL}/activities/insights`, {
+      headers: authHeaders,
+    });
     const data = await res.json();
     if (data.success) setInsights(data.insights);
   };
 
   const fetchMilestones = async () => {
-    const res = await fetch(`${API_URL}/activities/milestones`, { headers: authHeaders });
+    const res = await fetch(`${API_URL}/activities/milestones`, {
+      headers: authHeaders,
+    });
     const data = await res.json();
     if (data.success) setMilestones(data);
   };
@@ -111,20 +115,39 @@ export default function ProgressPage() {
   const changeMonth = (delta) => {
     let m = selectedMonth + delta;
     let y = selectedYear;
-    if (m > 12) { m = 1; y++; }
-    if (m < 1) { m = 12; y--; }
+    if (m > 12) {
+      m = 1;
+      y++;
+    }
+    if (m < 1) {
+      m = 12;
+      y--;
+    }
     setSelectedMonth(m);
     setSelectedYear(y);
   };
 
   const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
   // Chart data preparation
   const trendChartData = trend.slice(-trendDays).map((d) => ({
-    date: new Date(d.date).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+    date: new Date(d.date).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    }),
     percentage: d.percentage,
     completed: d.completed,
     total: d.total,
@@ -156,7 +179,10 @@ export default function ProgressPage() {
           <div className="h-8 w-56 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse"></div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-28 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse"></div>
+              <div
+                key={i}
+                className="h-28 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse"
+              ></div>
             ))}
           </div>
           <div className="h-80 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse"></div>
@@ -168,7 +194,6 @@ export default function ProgressPage() {
   return (
     <div className="p-2 lg:p-2">
       <div className="max-w-7xl mx-auto space-y-2">
-
         {/* Header */}
         {/* <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -254,7 +279,11 @@ export default function ProgressPage() {
                       <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:opacity-20" />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#e5e7eb"
+                    className="dark:opacity-20"
+                  />
                   <XAxis
                     dataKey="date"
                     tick={{ fontSize: 11 }}
@@ -300,7 +329,6 @@ export default function ProgressPage() {
 
         {/* Heatmap + Pie side by side */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
-
           {/* Heatmap */}
           <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
@@ -333,17 +361,24 @@ export default function ProgressPage() {
 
             <div className="grid grid-cols-7 gap-1.5">
               {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
-                <div key={i} className="text-center text-[10px] font-medium text-gray-400 py-1">
+                <div
+                  key={i}
+                  className="text-center text-[10px] font-medium text-gray-400 py-1"
+                >
                   {d}
                 </div>
               ))}
               {heatmap.map((day, idx) => {
                 const color =
-                  day.percentage === 0 ? "bg-gray-100 dark:bg-gray-700/50 text-gray-400" :
-                  day.percentage < 25 ? "bg-green-200 dark:bg-green-900/40 text-green-700 dark:text-green-300" :
-                  day.percentage < 50 ? "bg-green-300 dark:bg-green-800/60 text-green-800 dark:text-green-200" :
-                  day.percentage < 75 ? "bg-green-500 dark:bg-green-600 text-white" :
-                  "bg-green-700 dark:bg-green-500 text-white";
+                  day.percentage === 0
+                    ? "bg-gray-100 dark:bg-gray-700/50 text-gray-400"
+                    : day.percentage < 25
+                      ? "bg-green-200 dark:bg-green-900/40 text-green-700 dark:text-green-300"
+                      : day.percentage < 50
+                        ? "bg-green-300 dark:bg-green-800/60 text-green-800 dark:text-green-200"
+                        : day.percentage < 75
+                          ? "bg-green-500 dark:bg-green-600 text-white"
+                          : "bg-green-700 dark:bg-green-500 text-white";
                 return (
                   <div
                     key={idx}
@@ -386,7 +421,10 @@ export default function ProgressPage() {
                       paddingAngle={3}
                     >
                       {weeklyDistribution.map((entry, index) => (
-                        <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                        <Cell
+                          key={index}
+                          fill={COLORS[index % COLORS.length]}
+                        />
                       ))}
                     </Pie>
                     <Tooltip
@@ -408,15 +446,22 @@ export default function ProgressPage() {
             </div>
             <div className="space-y-1.5 mt-2">
               {weeklyDistribution.map((entry, i) => (
-                <div key={i} className="flex items-center justify-between text-xs">
+                <div
+                  key={i}
+                  className="flex items-center justify-between text-xs"
+                >
                   <div className="flex items-center gap-2">
                     <span
                       className="w-2.5 h-2.5 rounded-full"
                       style={{ background: COLORS[i % COLORS.length] }}
                     ></span>
-                    <span className="text-gray-600 dark:text-gray-400">{entry.name}</span>
+                    <span className="text-gray-600 dark:text-gray-400">
+                      {entry.name}
+                    </span>
                   </div>
-                  <span className="font-medium text-gray-900 dark:text-white">{entry.value} days</span>
+                  <span className="font-medium text-gray-900 dark:text-white">
+                    {entry.value} days
+                  </span>
                 </div>
               ))}
             </div>
@@ -432,7 +477,8 @@ export default function ProgressPage() {
                 Activity Performance
               </h2>
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                Completion rate per activity — spot your strengths and weaknesses
+                Completion rate per activity — spot your strengths and
+                weaknesses
               </p>
             </div>
 
@@ -443,7 +489,12 @@ export default function ProgressPage() {
                   layout="vertical"
                   margin={{ left: 20, right: 30 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:opacity-20" horizontal={false} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#e5e7eb"
+                    className="dark:opacity-20"
+                    horizontal={false}
+                  />
                   <XAxis
                     type="number"
                     domain={[0, 100]}
@@ -475,9 +526,11 @@ export default function ProgressPage() {
                       <Cell
                         key={index}
                         fill={
-                          entry.percentage >= 80 ? "#10b981" :
-                          entry.percentage >= 50 ? "#f59e0b" :
-                          "#ef4444"
+                          entry.percentage >= 80
+                            ? "#10b981"
+                            : entry.percentage >= 50
+                              ? "#f59e0b"
+                              : "#ef4444"
                         }
                       />
                     ))}
@@ -503,12 +556,20 @@ export default function ProgressPage() {
               </div>
               <div className="flex items-center gap-6">
                 <div className="text-right">
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Current</p>
-                  <p className="text-2xl font-bold text-orange-500">{milestones.currentStreak || 0} 🔥</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Current
+                  </p>
+                  <p className="text-2xl font-bold text-orange-500">
+                    {milestones.currentStreak || 0} 🔥
+                  </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Best</p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{milestones.bestStreak || 0}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Best
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {milestones.bestStreak || 0}
+                  </p>
                 </div>
               </div>
             </div>
@@ -516,7 +577,10 @@ export default function ProgressPage() {
             {milestones.nextMilestone && (
               <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
                 <p className="text-sm text-blue-700 dark:text-blue-300">
-                  🎯 {milestones.nextMilestone.days} more days to <span className="font-semibold">{milestones.nextMilestone.title}</span>
+                  🎯 {milestones.nextMilestone.days} more days to{" "}
+                  <span className="font-semibold">
+                    {milestones.nextMilestone.title}
+                  </span>
                 </p>
               </div>
             )}
@@ -548,7 +612,6 @@ export default function ProgressPage() {
             </div>
           </div>
         )}
-
       </div>
     </div>
   );
@@ -574,11 +637,15 @@ function StatCard({ title, value, suffix, icon, color, progress, subtitle }) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 border border-gray-200 dark:border-gray-700">
       <div className="flex items-start justify-between mb-2">
-        <p className="text-xs font-medium text-gray-500 dark:text-gray-400">{title}</p>
+        <p className="text-xs font-medium text-gray-500 dark:text-gray-400">
+          {title}
+        </p>
         <span className={colorClasses[color]}>{icon}</span>
       </div>
       <div className="flex items-baseline gap-1.5">
-        <span className="text-2xl font-bold text-gray-900 dark:text-white">{value}</span>
+        <span className="text-2xl font-bold text-gray-900 dark:text-white">
+          {value}
+        </span>
         {suffix && <span className="text-xs text-gray-400">{suffix}</span>}
       </div>
       {progress !== undefined && (
@@ -590,7 +657,9 @@ function StatCard({ title, value, suffix, icon, color, progress, subtitle }) {
         </div>
       )}
       {subtitle && (
-        <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-2">{subtitle}</p>
+        <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-2">
+          {subtitle}
+        </p>
       )}
     </div>
   );

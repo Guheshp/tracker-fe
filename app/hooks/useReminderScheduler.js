@@ -2,8 +2,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useSound } from "react-sounds";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
-
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const SOUND_PATHS = {
   chime: "/sounds/chime.mp3",
   alarm: "/sounds/alarm.mp3",
@@ -58,7 +57,7 @@ export function useReminderScheduler() {
         console.warn("Sound playback failed:", err.message);
       }
     },
-    [playChime, playAlarm, playUrgent, playMelody]
+    [playChime, playAlarm, playUrgent, playMelody],
   );
 
   // Fire a reminder once
@@ -84,7 +83,7 @@ export function useReminderScheduler() {
         }
       }
     },
-    [playSoundByType]
+    [playSoundByType],
   );
 
   // Poll every 30s across the whole app
@@ -123,10 +122,7 @@ export function useReminderScheduler() {
           due.forEach((r) => next.add(r.id));
           setFiredIds(next);
           try {
-            localStorage.setItem(
-              "firedReminderIds",
-              JSON.stringify([...next])
-            );
+            localStorage.setItem("firedReminderIds", JSON.stringify([...next]));
           } catch {
             /* ignore */
           }

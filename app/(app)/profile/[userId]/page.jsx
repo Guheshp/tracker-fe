@@ -2,7 +2,15 @@
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, User, Mail, Calendar, Award, Target, TrendingUp } from "lucide-react";
+import {
+  ArrowLeft,
+  User,
+  Mail,
+  Calendar,
+  Award,
+  Target,
+  TrendingUp,
+} from "lucide-react";
 import useAuthStore from "../../../authStore";
 
 export default function UserProfile() {
@@ -15,8 +23,7 @@ export default function UserProfile() {
   const [progress, setProgress] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
-
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     checkAuth();
@@ -35,14 +42,11 @@ export default function UserProfile() {
     setLoading(true);
     setError("");
     try {
-      const response = await fetch(
-        `${API_URL}/users/profile/${userId}`,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      );
+      const response = await fetch(`${API_URL}/users/profile/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await response.json();
 
       if (response.ok) {
@@ -88,7 +92,9 @@ export default function UserProfile() {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="text-center">
-          <p className="text-gray-600 dark:text-gray-400 mb-4">User not found</p>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
+            User not found
+          </p>
           <Link
             href="/dashboard"
             className="text-blue-600 hover:underline flex items-center gap-2 justify-center"
@@ -102,7 +108,11 @@ export default function UserProfile() {
   }
 
   const weeklyProgress = progress?.weeks || [];
-  const monthlyData = progress?.monthly || { completedDays: 0, totalDays: 0, completionRate: 0 };
+  const monthlyData = progress?.monthly || {
+    completedDays: 0,
+    totalDays: 0,
+    completionRate: 0,
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-2">
@@ -152,8 +162,12 @@ export default function UserProfile() {
                 <Target className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Activities</p>
-                <p className="text-xl font-bold text-gray-900 dark:text-white">{activities.length || 10}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Activities
+                </p>
+                <p className="text-xl font-bold text-gray-900 dark:text-white">
+                  {activities.length || 10}
+                </p>
               </div>
             </div>
           </div>
@@ -163,9 +177,12 @@ export default function UserProfile() {
                 <TrendingUp className="w-5 h-5 text-green-600 dark:text-green-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Days Completed</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Days Completed
+                </p>
                 <p className="text-xl font-bold text-gray-900 dark:text-white">
-                  {monthlyData.completedDays || 0} / {monthlyData.totalDays || 30}
+                  {monthlyData.completedDays || 0} /{" "}
+                  {monthlyData.totalDays || 30}
                 </p>
               </div>
             </div>
@@ -176,7 +193,9 @@ export default function UserProfile() {
                 <Award className="w-5 h-5 text-purple-600 dark:text-purple-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Consistency</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Consistency
+                </p>
                 <p className="text-xl font-bold text-gray-900 dark:text-white">
                   {monthlyData.completionRate || 0}%
                 </p>
@@ -193,18 +212,28 @@ export default function UserProfile() {
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
               {weeklyProgress.map((week) => (
-                <div key={week.week} className="text-center p-3 bg-gray-50 dark:bg-gray-700/30 rounded-lg">
+                <div
+                  key={week.week}
+                  className="text-center p-3 bg-gray-50 dark:bg-gray-700/30 rounded-lg"
+                >
                   <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
                     Week {week.week}
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">{week.days}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {week.days}
+                  </p>
                   <p className="text-xl font-bold text-gray-900 dark:text-white mt-1">
-                    {week.completed} <span className="text-sm font-normal text-gray-400">/ {week.total}</span>
+                    {week.completed}{" "}
+                    <span className="text-sm font-normal text-gray-400">
+                      / {week.total}
+                    </span>
                   </p>
                   <div className="mt-1 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
                     <div
                       className="bg-blue-600 h-1.5 rounded-full transition-all duration-500"
-                      style={{ width: `${(week.completed / week.total) * 100}%` }}
+                      style={{
+                        width: `${(week.completed / week.total) * 100}%`,
+                      }}
                     ></div>
                   </div>
                 </div>
@@ -219,16 +248,26 @@ export default function UserProfile() {
             Activities Tracked
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            {(activities.length > 0 ? activities : [
-              "Wake Up Early", "Exercise", "Healthy Food", "Drink Water", 
-              "Study / Learn", "Work / Project", "Read", "Meditation", 
-              "No Social Media", "Sleep on Time"
-            ]).map((activity, index) => (
-              <div 
-                key={index} 
+            {(activities.length > 0
+              ? activities
+              : [
+                  "Wake Up Early",
+                  "Exercise",
+                  "Healthy Food",
+                  "Drink Water",
+                  "Study / Learn",
+                  "Work / Project",
+                  "Read",
+                  "Meditation",
+                  "No Social Media",
+                  "Sleep on Time",
+                ]
+            ).map((activity, index) => (
+              <div
+                key={index}
                 className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700/30 rounded-lg"
               >
-                <span className="text-lg">{activity.icon || '📋'}</span>
+                <span className="text-lg">{activity.icon || "📋"}</span>
                 <span className="text-sm text-gray-700 dark:text-gray-300">
                   {activity.name || activity}
                 </span>

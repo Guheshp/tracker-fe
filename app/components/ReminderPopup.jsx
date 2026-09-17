@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Bell, Clock, Pause, Check, X } from "lucide-react";
 import { subscribeToReminderFire } from "../hooks/useReminderScheduler";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function ReminderPopup() {
   const [activePopup, setActivePopup] = useState(null);

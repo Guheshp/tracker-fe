@@ -2,13 +2,24 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Bell, Plus, Clock, Check, Volume2, Calendar, Zap, Coffee,
-  Edit2, Pause, Trash2, Users, Activity,
+  Bell,
+  Plus,
+  Clock,
+  Check,
+  Volume2,
+  Calendar,
+  Zap,
+  Coffee,
+  Edit2,
+  Pause,
+  Trash2,
+  Users,
+  Activity,
 } from "lucide-react";
 import useAuthStore from "../../authStore";
 import ReminderDrawer from "../../components/ReminderDrawer";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function RemindersPage() {
   const router = useRouter();
@@ -51,7 +62,8 @@ export default function RemindersPage() {
       const allData = await allRes.json();
 
       if (todayData.success) setTodayReminders(todayData.reminders || []);
-      if (upcomingData.success) setUpcomingReminders(upcomingData.reminders || []);
+      if (upcomingData.success)
+        setUpcomingReminders(upcomingData.reminders || []);
       if (allData.success) setReminders(allData.reminders || []);
     } catch (error) {
       console.error("Error fetching reminders:", error);
@@ -183,10 +195,13 @@ export default function RemindersPage() {
 
   const getTypeColor = (type) => {
     const colors = {
-      meeting: "bg-purple-100 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400",
+      meeting:
+        "bg-purple-100 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400",
       task: "bg-blue-100 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400",
-      activity: "bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400",
-      break: "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400",
+      activity:
+        "bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400",
+      break:
+        "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400",
       custom: "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400",
     };
     return colors[type] || colors.custom;
@@ -196,13 +211,25 @@ export default function RemindersPage() {
     activeTab === "today"
       ? todayReminders
       : activeTab === "upcoming"
-      ? upcomingReminders
-      : reminders;
+        ? upcomingReminders
+        : reminders;
 
   const emptyMessages = {
-    today: { icon: "🎉", title: "No reminders for today", subtitle: "All caught up!" },
-    upcoming: { icon: "📅", title: "No upcoming reminders", subtitle: "Your schedule is clear for the next week." },
-    all: { icon: "🔔", title: "No reminders yet", subtitle: "Create your first reminder to get started." },
+    today: {
+      icon: "🎉",
+      title: "No reminders for today",
+      subtitle: "All caught up!",
+    },
+    upcoming: {
+      icon: "📅",
+      title: "No upcoming reminders",
+      subtitle: "Your schedule is clear for the next week.",
+    },
+    all: {
+      icon: "🔔",
+      title: "No reminders yet",
+      subtitle: "Create your first reminder to get started.",
+    },
   };
 
   const empty = emptyMessages[activeTab];
@@ -235,9 +262,24 @@ export default function RemindersPage() {
         {/* Tabs */}
         <div className="flex gap-2 mb-5 overflow-x-auto">
           {[
-            { id: "today", label: "Today", icon: <Clock className="w-4 h-4" />, count: todayReminders.length },
-            { id: "upcoming", label: "Upcoming", icon: <Calendar className="w-4 h-4" />, count: upcomingReminders.length },
-            { id: "all", label: "All", icon: <Bell className="w-4 h-4" />, count: reminders.length },
+            {
+              id: "today",
+              label: "Today",
+              icon: <Clock className="w-4 h-4" />,
+              count: todayReminders.length,
+            },
+            {
+              id: "upcoming",
+              label: "Upcoming",
+              icon: <Calendar className="w-4 h-4" />,
+              count: upcomingReminders.length,
+            },
+            {
+              id: "all",
+              label: "All",
+              icon: <Bell className="w-4 h-4" />,
+              count: reminders.length,
+            },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -295,7 +337,7 @@ export default function RemindersPage() {
                     <div className="flex items-center gap-2.5">
                       <span
                         className={`p-1.5 rounded-lg flex-shrink-0 ${getTypeColor(
-                          reminder.reminderType
+                          reminder.reminderType,
                         )}`}
                       >
                         {getTypeIcon(reminder.reminderType)}

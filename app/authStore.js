@@ -1,7 +1,7 @@
 ﻿"use client";
 import { create } from "zustand";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const useAuthStore = create((set, get) => ({
   user: null,
@@ -20,7 +20,7 @@ const useAuthStore = create((set, get) => ({
 
     try {
       const response = await fetch(`${API_URL}/auth/me`, {
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.ok) {
@@ -42,15 +42,20 @@ const useAuthStore = create((set, get) => ({
     try {
       const response = await fetch(`${API_URL}/auth/register`, {
         method: "POST",
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         localStorage.setItem("token", data.token);
-        set({ user: data.user, token: data.token, isLoading: false, error: null });
+        set({
+          user: data.user,
+          token: data.token,
+          isLoading: false,
+          error: null,
+        });
         await get().fetchActivities();
         return { success: true };
       } else {
@@ -67,15 +72,20 @@ const useAuthStore = create((set, get) => ({
     try {
       const response = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         localStorage.setItem("token", data.token);
-        set({ user: data.user, token: data.token, isLoading: false, error: null });
+        set({
+          user: data.user,
+          token: data.token,
+          isLoading: false,
+          error: null,
+        });
         await get().fetchActivities();
         return { success: true };
       } else {
@@ -94,7 +104,7 @@ const useAuthStore = create((set, get) => ({
 
     try {
       const response = await fetch(`${API_URL}/activities`, {
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.ok) {
@@ -115,10 +125,13 @@ const useAuthStore = create((set, get) => ({
     if (!token) return;
 
     try {
-      const today = new Date().toISOString().split('T')[0];
-      const response = await fetch(`${API_URL}/activities/daily?date=${today}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      const today = new Date().toISOString().split("T")[0];
+      const response = await fetch(
+        `${API_URL}/activities/daily?date=${today}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -134,17 +147,17 @@ const useAuthStore = create((set, get) => ({
     if (!token) return;
 
     try {
-      const today = new Date().toISOString().split('T')[0];
-      const week = Math.ceil(parseInt(today.split('-')[2]) / 7);
-      const day = parseInt(today.split('-')[2]);
+      const today = new Date().toISOString().split("T")[0];
+      const week = Math.ceil(parseInt(today.split("-")[2]) / 7);
+      const day = parseInt(today.split("-")[2]);
 
       const response = await fetch(`${API_URL}/activities/toggle`, {
         method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ activityId, date: today, week, day })
+        body: JSON.stringify({ activityId, date: today, week, day }),
       });
 
       if (response.ok) {
@@ -167,7 +180,7 @@ const useAuthStore = create((set, get) => ({
       token: null,
       activities: [],
       totalDaysComplete: 0,
-      isLoading: false
+      isLoading: false,
     });
   },
 
