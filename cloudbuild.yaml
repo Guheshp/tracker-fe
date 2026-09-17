@@ -1,0 +1,22 @@
+steps:
+  # 1. Build Docker image
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - "build"
+      - "--build-arg"
+      - "NEXT_PUBLIC_API_URL=https://tracker-backend-853948916669.asia-south1.run.app/api"
+      - "-t"
+      - "asia-south1-docker.pkg.dev/gcp-learning-506406/tracker-images/tracker-frontend:$COMMIT_SHA"
+      - "."
+
+  # 2. Push Docker image to Artifact Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - "push"
+      - "asia-south1-docker.pkg.dev/gcp-learning-506406/tracker-images/tracker-frontend:$COMMIT_SHA"
+
+images:
+  - "asia-south1-docker.pkg.dev/gcp-learning-506406/tracker-images/tracker-frontend:$COMMIT_SHA"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
