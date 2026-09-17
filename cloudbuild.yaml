@@ -15,6 +15,26 @@ steps:
       - "push"
       - "asia-south1-docker.pkg.dev/gcp-learning-506406/tracker-images/tracker-frontend:$COMMIT_SHA"
 
+  # 3. Deploy to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: "gcloud"
+    args:
+      - "run"
+      - "deploy"
+      - "tracker-frontend"
+      - "--image"
+      - "asia-south1-docker.pkg.dev/gcp-learning-506406/tracker-images/tracker-frontend:$COMMIT_SHA"
+      - "--region"
+      - "asia-south1"
+      - "--platform"
+      - "managed"
+      - "--port"
+      - "3000"
+      - "--ingress"
+      - "all"
+      - "--allow-unauthenticated"
+      - "--quiet"
+
 images:
   - "asia-south1-docker.pkg.dev/gcp-learning-506406/tracker-images/tracker-frontend:$COMMIT_SHA"
 
